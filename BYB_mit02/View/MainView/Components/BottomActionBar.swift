@@ -1,33 +1,39 @@
+//
+//  BottomActionBar.swift
+//  BYB_mit02
+//
+//  Created by Vituruch Sinthusate on 11/1/2569 BE.
+//
+
+
 import SwiftUI
 
 struct BottomActionBar: View {
     let selected: ScanType
     let onSelect: (ScanType) -> Void
-
+    let onReport: () -> Void
     var body: some View {
-        HStack {
-            ActionItem(icon: "magnifyingglass", isSelected: selected == .url) { onSelect(.url) }
-            Spacer()
-            ActionItem(icon: "phone.fill", isSelected: selected == .phone) { onSelect(.phone) }
-            Spacer()
-            ActionItem(icon: "banknote.fill", isSelected: selected == .bank) { onSelect(.bank) }
-            Spacer()
-            ActionItem(icon: "qrcode.viewfinder", isSelected: selected == .qr) { onSelect(.qr) }
-        }
-        .padding(.horizontal, 26)
-        .padding(.vertical, 14)
-        .background(
-            LinearGradient(
-                colors: [Color(red: 0.12, green: 0.19, blue: 0.55), Color(red: 0.18, green: 0.33, blue: 0.78)],
-                startPoint: .leading,
-                endPoint: .trailing
+            HStack {
+                ActionItem(icon: "magnifyingglass", isSelected: selected == .url) { onSelect(.url) }
+                Spacer()
+                ActionItem(icon: "phone.fill", isSelected: selected == .phone) { onSelect(.phone) }
+                Spacer()
+                ActionItem(icon: "banknote.fill", isSelected: selected == .bank) { onSelect(.bank) }
+                Spacer()
+                ActionItem(icon: "qrcode.viewfinder", isSelected: selected == .qr) { onSelect(.qr) }
+                Spacer()
+                ActionItem(icon: "exclamationmark.bubble.fill", isSelected: false, isWarning: true) { onReport() }
+            }
+            .padding(.horizontal, 26).padding(.vertical, 14)
+            .background(
+                LinearGradient(colors: [Color(red: 0.12, green: 0.19, blue: 0.55), Color(red: 0.18, green: 0.33, blue: 0.78)], startPoint: .leading, endPoint: .trailing)
             )
-        )
-    }
+        }
 
     private struct ActionItem: View {
         let icon: String
         let isSelected: Bool
+        var isWarning: Bool = false
         let action: () -> Void
 
         var body: some View {

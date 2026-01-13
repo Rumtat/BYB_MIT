@@ -1,3 +1,11 @@
+//
+//  InputCard.swift
+//  BYB_mit02
+//
+//  Created by Vituruch Sinthusate on 11/1/2569 BE.
+//
+
+
 import SwiftUI
 import PhotosUI
 
@@ -42,27 +50,36 @@ struct InputCard: View {
         case .qr: return 120
         case .phone: return 86
         case .url, .text: return 140
+        case .report: return 0
         }
     }
 
     @ViewBuilder
     private var content: some View {
         switch selectedType {
-        case .phone:
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Phone")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            // ใน InputCard.swift ตรงส่วน case .phone
+            case .phone:
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Phone Number")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
 
-                TextField("0xxxxxxxxx", text: $phoneDigits)
-                    .keyboardType(.numberPad)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .onChange(of: phoneDigits) { _, newValue in
-                        let digits = newValue.filter { $0.isNumber }
-                        phoneDigits = String(digits.prefix(10))
-                    }
-            }
+                    TextField("ระบุเบอร์โทรศัพท์ หรือ +รหัสประเทศ", text: $phoneDigits)
+                        .keyboardType(.phonePad) // ✅ เปลี่ยนเป็น phonePad เพื่อให้มีปุ่ม + * #
+                        .font(.title2)
+                        .onChange(of: phoneDigits) { oldValue, newValue in
+                            // ✅ ต้องอนุญาตให้มีเครื่องหมาย + ในฟิลเตอร์ด้วย
+                            let allowed = "0123456789+"
+                            let filtered = newValue.filter { allowed.contains($0) }
+                            
+                            // จำกัดความยาว 15 ตัว (รวม +)
+                            if filtered.count <= 15 {
+                                phoneDigits = filtered
+                            } else {
+                                phoneDigits = String(filtered.prefix(15))
+                            }
+                        }
+                }
 
         case .bank:
             VStack(alignment: .leading, spacing: 8) {
@@ -155,6 +172,7 @@ struct InputCard: View {
 
                 // TODO: Document picker
             }
+        case .report: EmptyView()
         }
     }
 }

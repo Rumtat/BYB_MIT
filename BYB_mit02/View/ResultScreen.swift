@@ -9,28 +9,35 @@ import SwiftUI
 
 struct ResultView: View {
     let result: ScanResult
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Result").font(.title2)
+        ZStack {
+            backgroundColor.ignoresSafeArea()
 
-            Text(result.level == .low ? "SAFE" : "NOT SAFE")
-                .font(.largeTitle).bold()
+            VStack(spacing: 16) {
+                Text(result.level == .low ? "This Link is safe!" : "WARNING\nThis link could be dangerous!")
+                    .font(.title2).bold()
+                    .multilineTextAlignment(.center)
 
-            Text("Type: \(result.type.rawValue)")
-            Text("Input: \(result.input)").lineLimit(6)
+                Button("Return to main menu") {
+                    dismiss() // กลับหน้าหลัก
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.top, 12)
 
-            Text("Reasons:")
-                .font(.headline)
-            ForEach(result.reasons, id: \.self) { Text("• \($0)") }
-
-            Button("Report (MVP)") {
-                // MVP: แค่ print/บันทึก local ก่อน
+                Spacer()
             }
-            .frame(maxWidth: .infinity, minHeight: 44)
-
-            Spacer()
+            .padding(.top, 80)
+            .padding(.horizontal, 20)
         }
-        .padding()
+    }
+
+    private var backgroundColor: Color {
+        switch result.level {
+        case .low: return Color.green.opacity(0.25)   // SAFE = เขียว
+        case .medium: return Color.orange.opacity(0.25)
+        case .high: return Color.red.opacity(0.25)    // SCAM = แดง
+        }
     }
 }

@@ -30,15 +30,19 @@ struct HeaderBar: View {
                 Image(systemName: "gearshape")
                     .font(.title3)
                     .foregroundStyle(.white)
+                    .padding(.trailing, 4)
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.12, green: 0.19, blue: 0.55), Color(red: 0.18, green: 0.33, blue: 0.78)],
-                startPoint: .leading, endPoint: .trailing
+                startPoint: .leading,
+                endPoint: .trailing
             )
         )
     }
 }
+
